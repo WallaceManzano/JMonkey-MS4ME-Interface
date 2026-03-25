@@ -1,93 +1,91 @@
 # JMonkeyInterface
 
-`JMonkeyInterface` is a prototype integration project that connects a 3D scene built with the jMonkeyEngine to MS4ME developer simulator models.
+## Abstract
 
-The current implementation uses a jMonkey-based flood-monitoring scene to generate simulated sensor readings, sends those values to the MS4ME side, and displays responses from the simulator back inside the game HUD.
+`JMonkeyInterface` is an experimental software artifact intended to investigate the integration of the jMonkeyEngine real-time 3D environment with the MS4ME developer simulator. The project explores how an interactive visualization layer can be coupled with model-driven simulation components, allowing simulated environmental states to be transmitted to MS4ME and processed results to be returned to the visualization in near real time.
 
-## Goal
+The present implementation instantiates this objective through a flood-monitoring scenario in which a jMonkey-based terrain scene generates dynamic water-level observations, communicates these observations to the MS4ME side, and renders returned values within the application interface.
 
-The goal of this project is to bridge:
+## Research Objective
 
-- `jMonkeyEngine` as the real-time 3D visualization layer
-- `MS4ME dev simulator` as the model/simulation layer
+The central objective of this project is to establish a bidirectional interface between:
 
-In practice, this means the visual environment can act as a live producer of sensor data, while the MS4ME models can process that data and return values that influence or explain what is happening in the scene.
+- `jMonkeyEngine`, used as an interactive 3D visualization and simulation front end
+- `MS4ME dev simulator`, used as the model execution and decision-processing layer
 
-## Current Prototype
+From a research perspective, the project serves as a proof of concept for coupling visual simulation environments with external model-based systems. Such coupling enables the 3D scene to operate as both a presentation layer and a source of simulated stimuli, while MS4ME provides structured processing of those stimuli.
 
-The repository contains an early prototype centered on a flood-monitoring scenario:
+## Prototype Scenario
 
-- Three lakes are rendered in a jMonkey terrain scene.
-- Water heights change over time inside the simulation.
-- Each lake acts like a sensor source (`Sensor1` to `Sensor3`).
-- Sensor values are sent to the MS4ME side through a Java client/server integration.
-- Returned model values are shown in the on-screen HUD.
+The current prototype is organized around a flood-monitoring use case. Within the scene, three separate water bodies are represented and their heights evolve over time. These values are interpreted as sensor outputs and transmitted to the MS4ME integration layer under identifiers such as `Sensor1`, `Sensor2`, and `Sensor3`. Responses returned by the model side are displayed in the on-screen heads-up display, thereby making the interaction between the visualization and the simulator directly observable.
 
-## Repository Structure
+## Repository Organization
 
 - `3D Models/BasicGame/`
-  Legacy NetBeans + Ant jMonkey project containing the 3D application and assets.
+  Legacy NetBeans/Ant jMonkey project containing source code, native libraries, and scene assets.
 - `3D Models/BasicGame/src/mygame/Main.java`
-  Main application entry point for the flood-monitoring visualization.
+  Primary application entry point for the flood-monitoring visualization.
 - `3D Models/BasicGame/src/mygame/TestSceneWater.java`
-  Standalone water-scene experiment/example.
+  Auxiliary scene used for water-rendering experimentation.
 - `3D Models/BasicGame/src/mygame/WaterUI.java`
-  Keyboard controls for tweaking water rendering parameters in the test scene.
+  Utility class for interactive adjustment of water-rendering parameters in the test scene.
 - `models/`
-  MS4ME simulator model files (`.dnl`, `.ses`) used by the prototype.
+  MS4ME simulator artifacts (`.dnl`, `.ses`) associated with the prototype.
 - `server/`
-  Java-side integration/server code intended to communicate with MS4ME.
+  Java-side communication code intended to support the interface to MS4ME.
 
-## How It Works
+## System Interaction
 
-At a high level, the prototype works like this:
+At the conceptual level, the system operates according to the following sequence:
 
-1. The jMonkey application starts and loads a terrain-based 3D scene.
-2. Three water areas represent monitored lakes.
-3. The application updates water depth values over time.
-4. Each updated value is packaged as a request such as `Sensor1`, `Sensor2`, or `Sensor3`.
-5. These requests are sent to the MS4ME integration layer.
-6. Responses coming back from the model side are rendered in the HUD.
+1. The jMonkey application initializes a terrain-based 3D environment.
+2. Dynamic water elements represent monitored lakes or reservoirs.
+3. Water-height values are updated during execution.
+4. Updated values are encapsulated as sensor-oriented requests.
+5. These requests are transmitted to the MS4ME integration layer.
+6. Model outputs returned from MS4ME are visualized in the application HUD.
 
-This makes the jMonkey scene a visual front end for MS4ME-driven simulation behavior.
+This interaction pattern positions the jMonkey application as an experimental front end for observing, stimulating, and interpreting model behavior.
 
-## Technology Stack
+## Technical Context
 
-- Java 7-era codebase
-- jMonkeyEngine 3.1
+The repository reflects a legacy Java desktop prototype with the following characteristics:
+
+- Java source level `1.7`
+- jMonkeyEngine `3.1`
 - NetBeans project metadata (`nbproject`)
-- Ant build (`build.xml`)
-- Native libraries for LWJGL/OpenAL/Bullet included in the project folder
+- Ant-based build configuration (`build.xml`)
+- Bundled native runtime libraries for LWJGL, OpenAL, and Bullet
 
-## Requirements
+These choices suggest that the project should be understood primarily as a historical or exploratory prototype rather than a contemporary production system.
 
-To work with this project as it exists today, you will likely need:
+## Build and Execution Considerations
 
-- Java JDK compatible with the original source level (`1.7`)
-- NetBeans or another environment that can import legacy Ant-based Java projects
-- jMonkeyEngine 3.1 libraries configured in NetBeans
-- The external `MS4meServer.jar` dependency expected by the jMonkey project
+To execute the project in its present form, the following environment is likely required:
 
-Note: the NetBeans project properties currently reference `MS4meServer.jar` from a user-specific absolute path. You will need to update that dependency on your machine before the project can build successfully.
+- A Java JDK compatible with source level `1.7`
+- NetBeans, or another environment capable of importing legacy Ant-based Java projects
+- jMonkeyEngine `3.1` libraries configured for the project
+- The external `MS4meServer.jar` dependency referenced by the jMonkey application
 
-## Running the jMonkey Application
+The current NetBeans configuration references `MS4meServer.jar` through a machine-specific absolute path. Consequently, this dependency must be reconfigured locally before the project can be built successfully.
 
-The main visualization entry point is:
+The principal visualization entry point is:
 
 - `3D Models/BasicGame/src/mygame/Main.java`
 
-Typical workflow:
+A typical execution sequence is as follows:
 
-1. Open `3D Models/BasicGame` as a NetBeans/Ant project.
-2. Fix any missing library references, especially jMonkeyEngine libraries and `MS4meServer.jar`.
-3. Build and run the project.
-4. Start the MS4ME simulator/integration side so the socket communication can succeed.
+1. Import `3D Models/BasicGame` as a NetBeans/Ant project.
+2. Resolve missing library references, including the jMonkeyEngine libraries and `MS4meServer.jar`.
+3. Build and run the application.
+4. Ensure that the corresponding MS4ME-side service is active and reachable.
 
-The application creates a client connection on port `4242`, so the corresponding MS4ME-side service is expected to be available there.
+The current client implementation attempts to establish communication through port `4242`, implying that the complementary MS4ME-side service should be exposed there.
 
-## MS4ME Models
+## MS4ME Artifacts
 
-The `models/` folder contains the simulator artifacts used by the project, including:
+The `models/` directory contains the simulator artifacts associated with this prototype, including:
 
 - `FloodMonitoring.ses`
 - `Gateway.dnl`
@@ -101,29 +99,29 @@ The `models/` folder contains the simulator artifacts used by the project, inclu
 - `StimuliGenerator3.dnl`
 - `StimuliGenerator4.dnl`
 
-These files define the MS4ME-side structure for receiving and processing the sensor/stimulus data coming from the jMonkey visualization.
+These artifacts appear to define the MS4ME-side structure responsible for receiving, routing, and processing stimuli originating from the visualization layer.
 
-## Project Status
+## Limitations
 
-This repository should currently be treated as a research/prototype integration rather than a polished, production-ready application.
+The repository currently exhibits several characteristics typical of an early-stage research prototype:
 
-Some signs of that:
+- Dependence on legacy Java and jMonkeyEngine versions
+- NetBeans-specific project configuration
+- Absolute, user-specific dependency paths
+- Partial or incomplete communication/server-side code
 
-- Legacy Java and jMonkeyEngine versions
-- NetBeans-specific project setup
-- External dependencies referenced through machine-specific paths
-- Server-side code that appears to be partial or in-progress
+Accordingly, the project should be interpreted as an integration study or proof of concept rather than a finalized software package.
 
-## Suggested Next Steps
+## Future Work
 
-If you plan to continue this project, good next improvements would be:
+Several extensions would improve the reproducibility and research utility of the project:
 
-- Replace absolute library paths with project-local or build-managed dependencies
-- Add a reproducible build using Maven or Gradle
-- Document the MS4ME communication protocol in more detail
-- Clarify how to launch the simulator models alongside the jMonkey client
-- Clean up and complete the server-side integration code
+- Replace machine-specific library references with project-local or dependency-managed configuration
+- Introduce a reproducible build process through Maven or Gradle
+- Document the communication protocol between the visualization layer and MS4ME
+- Specify the procedure for launching the simulator models and the interface concurrently
+- Complete and validate the server-side integration code
 
-## Summary
+## Conclusion
 
-`JMonkeyInterface` is an integration experiment that uses jMonkeyEngine as a visual simulation front end and MS4ME as the underlying developer simulator/modeling environment. The included prototype demonstrates a flood-monitoring scenario where dynamic lake levels are sent from the 3D scene to MS4ME and simulator responses are shown back in the interface.
+`JMonkeyInterface` demonstrates an exploratory coupling between a real-time 3D visualization environment and the MS4ME developer simulator. In its current state, the project provides an initial proof of concept for representing environmental dynamics visually, transmitting those dynamics as model inputs, and reflecting simulator outputs back into the interface for observation and analysis.
