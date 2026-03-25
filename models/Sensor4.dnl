@@ -1,0 +1,57 @@
+
+A DataSet has buffer!
+the range of DataSet's buffer is java.util.ArrayList<Measure>!
+
+A Measure has source and value!
+the range of Measure's source is String!
+the range of Measure's value is Double!
+
+use outputList with type ArrayList<Measure>!
+
+generates output on Data with type DataSet!
+accepts input on Data with type DataSet!
+
+to start hold in getData for time 1!
+from getData go to receiveData!
+when in getData and receive Data go to receiveData!
+after getData output DataRequest!
+passivate in receiveData!
+when in receiveData and receive Data go to forwardData!
+hold in forwardData for time 1!
+after forwardData output Data!
+from forwardData go to getData!
+
+
+add library
+<%
+import java.util.ArrayList;
+%>!
+
+initialize variables
+<%
+outputList = new ArrayList<Measure>();
+%>!
+
+external event for receiveData with Data
+<%
+
+for(Message<DataSet> ms : messageList) {
+	DataSet ds = ms.getData();
+	outputList.addAll(ds.buffer);
+}
+%>!
+
+
+external event for getData with Data
+<%
+
+for(Message<DataSet> ms : messageList) {
+	DataSet ds = ms.getData();
+	outputList.addAll(ds.buffer);
+}
+%>!
+output event for forwardData
+<%
+output.add(outData, new DataSet(outputList));
+outputList = new ArrayList<Measure>();
+%>!

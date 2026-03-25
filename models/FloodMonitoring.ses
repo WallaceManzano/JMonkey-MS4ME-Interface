@@ -1,0 +1,18 @@
+from the top perspective, FloodMonitoring is made of Gateway, Sensor1, Sensor2, Sensor3, Sensor4, 
+StimuliGenerator1, StimuliGenerator2, StimuliGenerator3, StimuliGenerator4, and JMonkeyInt! 
+
+from the top perspective, StimuliGenerator1 sends Data to Sensor1!
+from the top perspective, Sensor1 sends DataRequest to StimuliGenerator1!
+from the top perspective, StimuliGenerator2 sends Data to Sensor2!
+from the top perspective, Sensor2 sends DataRequest to StimuliGenerator2!
+from the top perspective, StimuliGenerator3 sends Data to Sensor3!
+from the top perspective, Sensor3 sends DataRequest to StimuliGenerator3!
+from the top perspective, StimuliGenerator4 sends Data to Sensor4!
+from the top perspective, Sensor4 sends DataRequest to StimuliGenerator4!
+
+from the top perspective, Sensor4 sends Data to Sensor3!
+from the top perspective, Sensor3 sends Data to Sensor2!
+from the top perspective, Sensor2 sends Data to Sensor1!
+from the top perspective, Sensor1 sends Data to Gateway!
+
+from the top perspective, Gateway sends Alert to FloodMonitoring!

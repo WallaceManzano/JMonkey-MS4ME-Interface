@@ -1,0 +1,51 @@
+A DataSet has buffer!
+the range of DataSet's buffer is java.util.ArrayList<Measure>!
+
+A Measure has source and value!
+the range of Measure's source is String!
+the range of Measure's value is Double!
+
+use inputList with type ArrayList<Measure>!
+
+accepts input on Data with type DataSet!
+
+
+to start passivate in receiveData!
+when in receiveData and receive Data go to processData!
+hold in processData for time 1!
+from processData go to receiveData!
+
+hold in alert for time 1!
+from alert go to receiveData!
+after alert output Alert!
+
+add library
+<%
+import java.util.ArrayList;
+%>!
+
+initialize variables
+<%
+inputList = new ArrayList<Measure>();
+%>!
+
+
+external event for receiveData with Data
+<%
+
+for(Message<DataSet> ms : messageList) {
+	DataSet ds = ms.getData();
+	inputList.addAll(ds.buffer);
+}
+%>!
+
+internal event for processData
+<%
+for(Measure m : inputList){
+	if(m.value > 100) {
+		holdIn("alert", 1.0);
+		break;
+	}
+}
+inputList = new ArrayList<Measure>();
+%>!

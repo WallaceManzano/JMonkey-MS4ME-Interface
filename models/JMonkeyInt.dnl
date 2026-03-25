@@ -1,0 +1,93 @@
+use debug with type boolean and default "false"!
+
+add library
+<%
+import java.net.ServerSocket;
+import java.net.Socket;
+
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.IOException;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+
+import java.util.Queue;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.LinkedHashMap;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Field;
+
+import com.ms4systems.devs.core.model.impl.CoupledModelImpl;
+import com.ms4systems.devs.core.model.AtomicModel;
+import com.ms4systems.devs.core.message.Coupling;
+
+import server.MS4MeServer;
+%>!
+
+add additional code
+<%
+public MS4MeServer controller;
+%>!
+
+use currentStep with type int and default "0"!
+use notRemoved with type int and default "0"!
+
+to start hold in s0 for time 1!
+when in s0 and receive CloseServer go to s0!
+when in s0 and receive PrintValues go to s0!
+from s0 go to s0!
+
+external event for s0 with CloseServer
+<%
+controller.close();
+%>!
+
+
+external event for s0 with PrintValues
+<%
+
+for(String k : controller.getModelValue().keySet()) {
+	Double v = controller.getModelValue().get(k);
+	System.out.println("M: " + k + " - V: " + v.toString());
+}
+%>!
+
+
+internal event for s0
+<%
+%>!
+
+initialize variables
+<%
+createMS4MEServer();
+%>!
+
+add additional code
+<%
+private boolean availablePort(String host, int port){
+  boolean result = true;
+  try {
+	new Socket(host, port).close();
+	result = false;
+  }
+  catch(IOException e) {}
+  return result;
+}
+%>!
+add additional code
+<%
+private void createMS4MEServer() {
+	if(controller == null && availablePort("localhost", 4242)) {
+		controller = new MS4MeServer();
+		controller.start();
+	}
+}
+%>!

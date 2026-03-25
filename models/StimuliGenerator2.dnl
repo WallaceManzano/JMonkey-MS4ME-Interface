@@ -1,0 +1,49 @@
+
+A DataSet has buffer!
+the range of DataSet's buffer is java.util.ArrayList<Measure>!
+
+A Measure has source and value!
+the range of Measure's source is String!
+the range of Measure's value is Double!
+
+use outputList with type ArrayList<Measure>!
+use jInt with type JMonkeyInt! 
+
+generates output on Data with type DataSet!
+accepts input on Data with type DataSet!
+
+to start passivate in w8Request!
+when in w8Request and receive DataRequest go to outputData!
+hold in outputData for time 1!
+from outputData go to w8Request!
+after outputData output Data!
+
+add library
+<%
+import java.util.ArrayList;
+import com.ms4systems.devs.core.model.AtomicModel;
+%>!
+
+initialize variables
+<%
+outputList = new ArrayList<Measure>();
+jInt = null;
+for(AtomicModel a : getParent().getChildren()) {
+	if(a instanceof JMonkeyInt) {
+		jInt = (JMonkeyInt) a;
+	}
+}
+%>!
+
+output event for outputData
+<%
+Double value = 0.0;
+if(jInt != null) {
+	if(jInt.controller.getModelValue().keySet().contains("SENSOR2")) {
+		value = jInt.controller.getModelValue().get("SENSOR2");
+	}
+}
+outputList.add(new Measure("Sensor2", value));
+output.add(outData, new DataSet(outputList));
+outputList = new ArrayList<Measure>();
+%>!
